@@ -1,0 +1,23 @@
+name       = "tumix-email-worker"
+main       = "tumix-worker/tumix-email-worker.js"
+compatibility_date = "2024-09-23"
+
+# ── KV namespace binding ──────────────────────────────────
+# After running `wrangler kv namespace create TUMIX_EMAILS`,
+# paste the returned id below.
+[[kv_namespaces]]
+binding  = "TUMIX_EMAILS"
+id       = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+
+# ── Secrets ───────────────────────────────────────────────
+# Set via CLI (never store secrets in this file):
+#   wrangler secret put ADMIN_SECRET
+# Then choose a strong random string as your admin password.
+
+# ── Routes ───────────────────────────────────────────────
+# Maps the worker to api.tu-mix.com
+# (Create a CNAME for api.tu-mix.com → your workers.dev subdomain in Cloudflare DNS,
+#  or use the routes block below and enable it on the dashboard.)
+routes = [
+  { pattern = "api.tu-mix.com/*", zone_name = "tu-mix.com" }
+]
