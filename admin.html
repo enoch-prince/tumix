@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tu-mix · Subscribers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0A0A0F;
+      --panel:   #111118;
+      --border:  rgba(245,166,35,0.15);
+      --amber:   #F5A623;
+      --slate:   #8B92A5;
+      --slate-light: #B4BAC8;
+      --white:   #F0F0F4;
+      --green:   #4ade80;
+      --red:     #f87171;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Login screen ── */
+    .login-screen {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .login-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    .login-logo .w-tu  { color: var(--white); }
+    .login-logo .w-mix { color: var(--amber); }
+
+    .login-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--slate-light);
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .field label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--slate);
+    }
+
+    .field input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--white);
+      outline: none;
+      caret-color: var(--amber);
+      transition: border-color 0.2s;
+    }
+    .field input:focus { border-color: rgba(245,166,35,0.5); }
+
+    .btn-primary {
+      background: var(--amber);
+      border: none;
+      border-radius: 4px;
+      padding: 0.8rem 1.2rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--black);
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+    .btn-primary:hover:not(:disabled) { background: #ffc142; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .error-msg {
+      font-size: 0.78rem;
+      color: var(--red);
+      display: none;
+    }
+
+    /* ── Dashboard ── */
+    .dashboard { display: none; flex-direction: column; min-height: 100vh; }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .header-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .header-logo .w-tu  { color: var(--white); }
+    .header-logo .w-mix { color: var(--amber); }
+
+    .header-badge {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--slate);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.2rem 0.6rem;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--slate-light);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
+
+    .btn-export {
+      background: var(--amber);
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--black);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-export:hover { background: #ffc142; }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      padding: 1.5rem 2rem;
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.2rem 1.5rem;
+      min-width: 140px;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .stat-value.amber { color: var(--amber); }
+
+    /* ── Search ── */
+    .toolbar {
+      padding: 0 2rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 360px;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.6rem 1rem 0.6rem 2.4rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: var(--white);
+      outline: none;
+      caret-color: var(--amber);
+      transition: border-color 0.2s;
+    }
+    .search-wrap input:focus { border-color: rgba(245,166,35,0.4); }
+    .search-wrap input::placeholder { color: var(--slate); }
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--slate);
+      pointer-events: none;
+    }
+
+    /* ── Table ── */
+    .table-wrap {
+      flex: 1;
+      padding: 0 2rem 2rem;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--slate);
+      font-weight: 500;
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(245,166,35,0.06);
+      transition: background 0.15s;
+    }
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+    td {
+      padding: 0.9rem 1rem;
+      color: var(--slate-light);
+    }
+
+    td.email-cell {
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    td.date-cell {
+      font-size: 0.8rem;
+      color: var(--slate);
+    }
+
+    .row-num {
+      color: var(--slate);
+      font-size: 0.78rem;
+      width: 40px;
+    }
+
+    /* ── Empty / loading states ── */
+    .state-msg {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--slate);
+      font-size: 0.88rem;
+    }
+
+    .spinner {
+      width: 20px; height: 20px;
+      border: 2px solid rgba(245,166,35,0.2);
+      border-top-color: var(--amber);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Footer ── */
+    .dash-footer {
+      border-top: 1px solid var(--border);
+      padding: 1rem 2rem;
+      font-size: 0.7rem;
+      color: var(--slate);
+      opacity: 0.4;
+      text-align: right;
+    }
+
+    @media (max-width: 480px) {
+      header, .stats-bar, .toolbar, .table-wrap { padding-left: 1rem; padding-right: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── LOGIN ── -->
+  <div class="login-screen" id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="w-tu">tu</span><span class="w-mix">-mix</span>
+      </div>
+      <p class="login-title">Subscriber Dashboard</p>
+      <div class="field">
+        <label>Admin Secret</label>
+        <input type="password" id="secret-input" placeholder="Enter your admin secret" />
+      </div>
+      <p class="error-msg" id="login-error">Incorrect secret — try again.</p>
+      <button class="btn-primary" id="login-btn" onclick="login()">Sign in</button>
+    </div>
+  </div>
+
+  <!-- ── DASHBOARD ── -->
+  <div class="dashboard" id="dashboard">
+
+    <header>
+      <div class="header-left">
+        <div class="header-logo">
+          <span class="w-tu">tu</span><span class="w-mix">-mix</span>
+        </div>
+        <span class="header-badge">Subscribers</span>
+      </div>
+      <div class="header-right">
+        <button class="btn-secondary" onclick="refresh()">↺ Refresh</button>
+        <button class="btn-export" onclick="exportCSV()">Export CSV</button>
+        <button class="btn-secondary" onclick="signOut()">Sign out</button>
+      </div>
+    </header>
+
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-label">Total subscribers</div>
+        <div class="stat-value amber" id="stat-total">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Latest signup</div>
+        <div class="stat-value" id="stat-latest" style="font-size:1rem;padding-top:0.4rem;color:var(--slate-light)">—</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="search-input" placeholder="Search by email…" oninput="renderTable()" />
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div id="table-state" class="state-msg">
+        <div class="spinner"></div>
+        Loading subscribers…
+      </div>
+      <table id="sub-table" style="display:none">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Email</th>
+            <th>Subscribed</th>
+          </tr>
+        </thead>
+        <tbody id="sub-body"></tbody>
+      </table>
+    </div>
+
+    <div class="dash-footer">© 2026 tu-mix · Admin</div>
+  </div>
+
+  <script>
+    const API = 'https://api.tu-mix.com/subscribers';
+    let allSubscribers = [];
+    let adminSecret    = '';
+
+    // ── Login ──
+    document.getElementById('secret-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') login();
+    });
+
+    async function login() {
+      const secret = document.getElementById('secret-input').value.trim();
+      if (!secret) return;
+
+      const btn = document.getElementById('login-btn');
+      btn.textContent = 'Signing in…';
+      btn.disabled    = true;
+
+      try {
+        const res  = await fetch(API, { headers: { 'X-Admin-Secret': secret } });
+        const data = await res.json();
+
+        if (!data.ok) {
+          document.getElementById('login-error').style.display = 'block';
+          btn.textContent = 'Sign in';
+          btn.disabled    = false;
+          return;
+        }
+
+        adminSecret = secret;
+        allSubscribers = data.subscribers || [];
+
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('dashboard').style.display    = 'flex';
+
+        renderStats();
+        renderTable();
+
+      } catch {
+        document.getElementById('login-error').textContent = 'Could not reach the server. Try again.';
+        document.getElementById('login-error').style.display = 'block';
+        btn.textContent = 'Sign in';
+        btn.disabled    = false;
+      }
+    }
+
+    // ── Render stats ──
+    function renderStats() {
+      document.getElementById('stat-total').textContent = allSubscribers.length;
+
+      if (allSubscribers.length > 0) {
+        const latest = allSubscribers[allSubscribers.length - 1];
+        const d = new Date(latest.subscribedAt);
+        document.getElementById('stat-latest').textContent =
+          d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      }
+    }
+
+    // ── Render table ──
+    function renderTable() {
+      const q    = document.getElementById('search-input').value.toLowerCase();
+      const rows = allSubscribers.filter(s => s.email.toLowerCase().includes(q));
+
+      const tbody = document.getElementById('sub-body');
+      const state = document.getElementById('table-state');
+      const table = document.getElementById('sub-table');
+
+      if (rows.length === 0) {
+        table.style.display = 'none';
+        state.innerHTML     = q
+          ? `No subscribers matching "<strong>${q}</strong>"`
+          : 'No subscribers yet.';
+        state.style.display = 'block';
+        return;
+      }
+
+      state.style.display = 'none';
+      table.style.display = 'table';
+
+      tbody.innerHTML = rows.map((s, i) => {
+        const d    = new Date(s.subscribedAt);
+        const date = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        return `
+          <tr>
+            <td class="row-num">${i + 1}</td>
+            <td class="email-cell">${s.email}</td>
+            <td class="date-cell">${date} · ${time}</td>
+          </tr>`;
+      }).join('');
+    }
+
+    // ── Refresh ──
+    async function refresh() {
+      document.getElementById('table-state').innerHTML =
+        '<div class="spinner"></div>Refreshing…';
+      document.getElementById('table-state').style.display = 'block';
+      document.getElementById('sub-table').style.display   = 'none';
+
+      try {
+        const res  = await fetch(API, { headers: { 'X-Admin-Secret': adminSecret } });
+        const data = await res.json();
+        if (data.ok) {
+          allSubscribers = data.subscribers || [];
+          renderStats();
+          renderTable();
+        }
+      } catch {
+        document.getElementById('table-state').textContent = 'Refresh failed. Check your connection.';
+      }
+    }
+
+    // ── Export CSV ──
+    function exportCSV() {
+      if (!allSubscribers.length) return;
+      const rows = [
+        ['#', 'Email', 'Subscribed At'],
+        ...allSubscribers.map((s, i) => [i + 1, s.email, s.subscribedAt])
+      ];
+      const csv  = rows.map(r => r.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = `tumix-subscribers-${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ── Sign out ──
+    function signOut() {
+      adminSecret    = '';
+      allSubscribers = [];
+      document.getElementById('secret-input').value        = '';
+      document.getElementById('login-error').style.display = 'none';
+      document.getElementById('dashboard').style.display   = 'none';
+      document.getElementById('login-screen').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>
