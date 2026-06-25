@@ -467,13 +467,13 @@
 
     <div class="email-wrap">
       <p class="email-prompt">Be the first to know when we go live.<br>No noise — just the signal.</p>
-      <p class="email-prompt">And ouuu -  there's a <b>surprise</b> after 🤭</p>
+      <p class="email-prompt" id="email-row2">And ouuu -  there's a <b>surprise</b> after 🤭</p>
       <div class="email-row" id="email-row">
         <input type="email" id="email-input" placeholder="your@email.com" aria-label="Email address" />
         <button onclick="handleSubmit()">Notify me</button>
       </div>
       <p class="email-success" id="email-success">✦ &nbsp;You're on the list. Stay tuned.</p>
-      <p class="email-success" id="email-success">✦ &nbsp;Here's a gift: <a href="voxspend.tu-mix.com" target="_blank">Claim a free App</a></p>
+      <p class="email-success" id="email-success2">✦ &nbsp;Here's a gift: <a href="https://voxspend.tu-mix.com" target="_blank">Claim a free App</a></p>
     </div>
 
     <a class="scroll-cue" href="#story" aria-label="Scroll to learn more">
@@ -638,7 +638,9 @@
 
         if (data.ok) {
           document.getElementById('email-row').style.display     = 'none';
+          document.getElementById('email-row2').style.display     = 'none';
           document.getElementById('email-success').style.display = 'block';
+          document.getElementById('email-success2').style.display = 'block';
         } else {
           btn.textContent = 'Notify me';
           btn.disabled    = false;
